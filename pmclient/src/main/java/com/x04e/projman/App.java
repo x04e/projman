@@ -1,4 +1,4 @@
-package com.x04e;
+package com.x04e.projman;
 
 /**
  * Hello world!

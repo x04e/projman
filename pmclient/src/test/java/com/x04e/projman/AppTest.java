@@ -1,4 +1,4 @@
-package com.x04e;
+package com.x04e.projman;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
