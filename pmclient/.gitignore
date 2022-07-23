@@ -8,6 +8,8 @@
 
 # Node
 /node_modules
+# Maven Frontend Plugin Node+NPM install folder
+/node
 npm-debug.log
 yarn-error.log
 
