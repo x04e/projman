@@ -13,6 +13,7 @@ alf_data_dev/
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 .project
+.factorypath
 .settings
 .vim
 .classpath
