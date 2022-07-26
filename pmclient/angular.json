@@ -24,7 +24,9 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/404.jsp",
+              "src/WEB-INF"
             ],
             "styles": [
               "src/styles.css"
