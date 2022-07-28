@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.x04e.projman</groupId>
     <artifactId>pmclient</artifactId>
+    <packaging>pom</packaging>
     <name>pmclient</name>
 
     <version>1.0-SNAPSHOT</version>
@@ -25,6 +26,7 @@
     </dependencies>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -42,7 +44,7 @@
                     </execution>
                     <execution>
                         <id>npm install</id>
-                        <goals> <goal>npm</goal></goals>
+                        <goals><goal>npm</goal></goals>
                     </execution>
                     <execution>
                         <id>npm build</id>

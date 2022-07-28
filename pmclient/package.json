@@ -2,12 +2,23 @@
   "name": "pmclient",
   "version": "0.0.0",
   "scripts": {
+    "gitversion": "node gitversion.js generate",
+
+    "preinstall": "$npm_execpath run gitversion",
+    "preng": "$npm_execpath run gitversion",
+    "prestart": "$npm_execpath run gitversion",
+    "prebuild": "$npm_execpath run gitversion",
+    "prewatch": "$npm_execpath run gitversion",
+    "pretest": "$npm_execpath run gitversion",
+    "pree2e": "$npm_execpath run gitversion",
+
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "e2e": "ng e2e",
+
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
@@ -33,6 +44,7 @@
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "cypress": "latest",
+    "git-describe": "^4.1.1",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
