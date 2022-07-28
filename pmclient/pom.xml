@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.x04e.projman</groupId>
     <artifactId>pmclient</artifactId>
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
     <name>pmclient</name>
 
     <version>1.0-SNAPSHOT</version>
@@ -28,6 +28,7 @@
     <build>
 
         <plugins>
+
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -62,9 +63,34 @@
                             <arguments>run test -- --watch=false</arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>npm start</id>
+                        <goals><goal>npm</goal></goals>
+                        <phase>install</phase>
+                        <configuration>
+                            <arguments>run start</arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <!-- Exclude empty 'WEB-INF/classes' dir from war -->
+                    <packagingExcludes>WEB-INF/classes/**</packagingExcludes>
+                    <webResources>
+                        <resource>
+                            <directory>dist/pmclient</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
         </plugins>
+
     </build>
 
 </project>
