@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class PmserverApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PmserverApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PmserverApplication.class, args);
+    }
 
-	@GetMapping("/")
-	public String root(){
-		return "hello, world!";
-	}
+    @GetMapping("/")
+    public String root(){
+        return "hello, world!";
+    }
 }

@@ -1,6 +1,6 @@
 import { buildInfo } from "./buildInfo";
 
 export const environment = {
-  production: true,
-  build: buildInfo
+    production: true,
+    build: buildInfo
 };
