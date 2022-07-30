@@ -3,11 +3,6 @@
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <parent>
-        <groupId>com.x04e</groupId>
-        <artifactId>projman</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.x04e.projman</groupId>
     <artifactId>pmclient</artifactId>
@@ -15,6 +10,10 @@
     <name>pmclient</name>
 
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
