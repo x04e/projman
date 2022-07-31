@@ -3,7 +3,7 @@ package com.x04e.projman.pmserver;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.x04e.projman.dto.Project;
+import com.x04e.projman.pmserver.dto.Project;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,14 +26,12 @@ public class ProjectController {
 
     @PostMapping
     public void postProject(@RequestBody Project project){
-        System.out.println("####### postProject() : nextProjectId: "+ nextProjectId +", project: "+ project);
         project.setId(nextProjectId++);
         projects.put(project.getId(), project);
     }
 
     @GetMapping("{id}")
     public Project getProject(@PathVariable Long id){
-        System.out.println("####### getProject() : nextProjectId: "+ nextProjectId +", project: "+ projects.get(id));
         return projects.get(id);
     }
 }

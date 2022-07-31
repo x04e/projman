@@ -1,4 +1,4 @@
-package com.x04e.projman.dto;
+package com.x04e.projman.pmserver.dto;
 
 public class Project {
 
