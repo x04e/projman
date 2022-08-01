@@ -1,69 +1,83 @@
 package com.x04e.projman.pmserver;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import static org.hamcrest.Matchers.containsString;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x04e.projman.pmserver.dto.Project;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ProjectControllerTest {
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mockMvc;
 
-    private HttpHeaders headers = new HttpHeaders();
-    {
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    @Test
+    public void givenValidProject_whenCreatingProject_shouldReturn201CREATED() throws Exception {
+        this.mockMvc.perform(
+                post("/projects")
+                .contentType("application/json")
+                .content(
+                    new ObjectMapper()
+                    .writeValueAsString(new Project(1, "myproject"))
+                )
+            )
+            .andExpect(status().isCreated());
+    }
+
+
+    @Test
+    public void givenProject_whenGET_shouldReturn200AndProjectJson() throws Exception {
+        this.mockMvc.perform(
+                post("/projects")
+                .contentType("application/json")
+                .content(
+                    new ObjectMapper()
+                    .writeValueAsString(new Project(1, "myproject")))
+                );
+
+        this.mockMvc.perform(get("/projects/1")).andExpectAll(
+                status().isOk(),
+                content().string(containsString("myproject"))
+            );
     }
 
     @Test
-    public void givenValidProject_whenPost_shouldGet() {
-        HttpEntity<String> entity = new HttpEntity<>("{\"id\":1,\"name\":\"myproject\"}", headers);
-        System.out.println("###### test1 : entity:"+ entity);
-        restTemplate.postForEntity("/projects", entity, Project.class);
+    public void givenProjects_whenGettingAllProjects_shouldReturn200AndAllProjects() throws Exception {
+        Project[] projects = new Project[]{
+            new Project(1, "my first project"),
+            new Project(2, "my second project"),
+            new Project(3, "my third project"),
+            new Project(4, "my fourth project")
+        };
 
-        ResponseEntity<Project> response = restTemplate.getForEntity("/projects/1", Project.class);
+        for(Project project : projects){
+            this.mockMvc.perform(post("/projects")
+                .contentType("application/json")
+                .content(new ObjectMapper().writeValueAsString(project)));
+        }
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getId()).isEqualTo(1);
-        assertThat(response.getBody().getName()).isEqualTo("myproject");
-    }
-
-    @Test
-    public void givenProjects_whenPostingToProjects_shouldGetProjects(){
-        HttpEntity<String> project1 = new HttpEntity<>("{\"name\":\"my first project\"}", headers);
-        HttpEntity<String> project2 = new HttpEntity<>("{\"name\":\"my second project\"}", headers);
-        HttpEntity<String> project3 = new HttpEntity<>("{\"name\":\"my third project\"}", headers);
-        HttpEntity<String> project4 = new HttpEntity<>("{\"name\":\"my fourth project\"}", headers);
-
-        restTemplate.postForEntity("/projects", project1, Project.class);
-        restTemplate.postForEntity("/projects", project2, Project.class);
-        restTemplate.postForEntity("/projects", project3, Project.class);
-        restTemplate.postForEntity("/projects", project4, Project.class);
-
-        ResponseEntity<Project[]> response = restTemplate.getForEntity("/projects", Project[].class);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        List<String> projectNames = Arrays.asList(response.getBody()).stream().map(Project::getName).collect(Collectors.toList());
-        assertThat(projectNames).contains("my first project");
-        assertThat(projectNames).contains("my second project");
-        assertThat(projectNames).contains("my third project");
-        assertThat(projectNames).contains("my fourth project");
+        this.mockMvc
+            .perform(get("/projects"))
+            .andExpectAll(
+                status().isOk(),
+                content().string(containsString("my first project")),
+                content().string(containsString("my second project")),
+                content().string(containsString("my third project")),
+                content().string(containsString("my fourth project"))
+            );
     }
 }
