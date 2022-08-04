@@ -3,17 +3,18 @@ package com.x04e.projman.pmserver;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.containsString;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x04e.projman.pmserver.dto.Project;
@@ -26,9 +27,10 @@ public class ProjectControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    @WithMockUser
     public void givenValidProject_whenCreatingProject_shouldReturn201CREATED() throws Exception {
         this.mockMvc.perform(
-                post("/projects")
+                post("/projects").with(csrf())
                 .contentType("application/json")
                 .content(
                     new ObjectMapper()
@@ -40,9 +42,10 @@ public class ProjectControllerTest {
 
 
     @Test
+    @WithMockUser
     public void givenProject_whenGET_shouldReturn200AndProjectJson() throws Exception {
         this.mockMvc.perform(
-                post("/projects")
+                post("/projects").with(csrf())
                 .contentType("application/json")
                 .content(
                     new ObjectMapper()
@@ -56,6 +59,7 @@ public class ProjectControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void givenProjects_whenGettingAllProjects_shouldReturn200AndAllProjects() throws Exception {
         Project[] projects = new Project[]{
             new Project(1, "my first project"),
@@ -65,7 +69,8 @@ public class ProjectControllerTest {
         };
 
         for(Project project : projects){
-            this.mockMvc.perform(post("/projects")
+            this.mockMvc.perform(
+                post("/projects").with(csrf())
                 .contentType("application/json")
                 .content(new ObjectMapper().writeValueAsString(project)));
         }
