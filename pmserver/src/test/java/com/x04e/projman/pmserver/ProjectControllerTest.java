@@ -30,7 +30,7 @@ public class ProjectControllerTest {
     @WithMockUser
     public void givenValidProject_whenCreatingProject_shouldReturn201CREATED() throws Exception {
         this.mockMvc.perform(
-                post("/projects").with(csrf())
+                post("/api/projects").with(csrf())
                 .contentType("application/json")
                 .content(
                     new ObjectMapper()
@@ -45,14 +45,14 @@ public class ProjectControllerTest {
     @WithMockUser
     public void givenProject_whenGET_shouldReturn200AndProjectJson() throws Exception {
         this.mockMvc.perform(
-                post("/projects").with(csrf())
+                post("/api/projects").with(csrf())
                 .contentType("application/json")
                 .content(
                     new ObjectMapper()
                     .writeValueAsString(new Project(1, "myproject")))
                 );
 
-        this.mockMvc.perform(get("/projects/1")).andExpectAll(
+        this.mockMvc.perform(get("/api/projects/1")).andExpectAll(
                 status().isOk(),
                 content().string(containsString("myproject"))
             );
@@ -70,13 +70,13 @@ public class ProjectControllerTest {
 
         for(Project project : projects){
             this.mockMvc.perform(
-                post("/projects").with(csrf())
+                post("/api/projects").with(csrf())
                 .contentType("application/json")
                 .content(new ObjectMapper().writeValueAsString(project)));
         }
 
         this.mockMvc
-            .perform(get("/projects"))
+            .perform(get("/api/projects"))
             .andExpectAll(
                 status().isOk(),
                 content().string(containsString("my first project")),

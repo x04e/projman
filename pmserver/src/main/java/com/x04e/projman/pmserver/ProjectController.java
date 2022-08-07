@@ -16,20 +16,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("projects")
-public class ProjectController {
+public class ProjectController extends ApiController {
 
     private static Map<Long, Project> projects = new HashMap<Long, Project>();
     private static long nextProjectId = 1;
 
     @Secured({"ROLE_USER"})
-    @GetMapping
+    @GetMapping("/projects")
     public Project[] getProjects(){
         return projects.values().toArray(new Project[0]);
     }
 
     @Secured({"ROLE_USER"})
-    @PostMapping
+    @PostMapping("/projects")
     @ResponseStatus(HttpStatus.CREATED)
     public void postProject(@RequestBody Project project){
         project.setId(nextProjectId++);
@@ -37,7 +36,7 @@ public class ProjectController {
     }
 
     @Secured({"ROLE_USER"})
-    @GetMapping("{id}")
+    @GetMapping("/projects/{id}")
     public Project getProject(@PathVariable Long id){
         return projects.get(id);
     }
