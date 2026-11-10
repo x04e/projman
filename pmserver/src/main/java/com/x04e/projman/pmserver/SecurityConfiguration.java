@@ -20,9 +20,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
             .antMatchers("/api/**").hasRole("USER")
+            .antMatchers("/h2-console/**").permitAll()
             .anyRequest()
                 .authenticated()
             .and()
                 .httpBasic();
+
+        http.csrf().ignoringAntMatchers("/h2-console/**");
+        http.headers().frameOptions().sameOrigin();
     }
 }
